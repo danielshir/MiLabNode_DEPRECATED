@@ -49,8 +49,14 @@ public class WeatherFetcher {
 		return new WeatherResponse(true, null, 0, null, 0, 0, null);
 	}
 
-	public void dispatchRequest(final WeatherResponseListener listener) {
-		JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, REQUEST_URL, null,
+	public void dispatchRequest(final String city, final WeatherResponseListener listener) {
+		JSONObject requestObject = new JSONObject();
+		try {
+			requestObject.put("city", city);
+		}
+		catch (JSONException e) {}
+
+		JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, REQUEST_URL, requestObject,
 				new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {

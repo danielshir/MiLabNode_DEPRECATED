@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,11 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
 	public void fetchWeather(final View view) {
 		final WeatherFetcher fetcher = new WeatherFetcher(view.getContext());
+		final String city = ((EditText)findViewById(R.id.edit_city)).getText().toString();
 		final ProgressDialog progressDialog = new ProgressDialog(this);
 		progressDialog.setMessage("Fetching weather...");
 		progressDialog.show();
 
-		fetcher.dispatchRequest(new WeatherFetcher.WeatherResponseListener() {
+		fetcher.dispatchRequest(city, new WeatherFetcher.WeatherResponseListener() {
 			@Override
 			public void onResponse(WeatherFetcher.WeatherResponse response) {
 				progressDialog.hide();
