@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const FCM = require('fcm-push');
 
-const FCM_SERVER_KEY = 'AIzaSyB7woR-X1ESQ09hCZsf77nh0memoAsilis';
+const FCM_SERVER_KEY = 'AIzaSyC2mIl6xB0CJ2m1Hb1hgbbfWt2M0QB5Qoo';
 const PORT = 8080;
 
 let app = express();
@@ -21,6 +21,7 @@ app.post('/:user/token', (req, res, next) => {
     if (!token) return res.status(400).json({err: "missing token"});
 
     tokens[req.params.user] = token;
+    res.status(200).json({msg: "saved ok"});
 });
 
 app.post('/:user/message', (req, res, next) => {
@@ -45,6 +46,10 @@ app.post('/:user/message', (req, res, next) => {
         if (err) return res.status(500).json({err: `message sending failed - ${err}`});
         return res.status(200).json({msg: "sent ok"});
     });
+});
+
+app.get('/tokens', (req, res, next) => {
+    res.status(200).json(tokens);
 });
 
 app.listen(PORT, () => {

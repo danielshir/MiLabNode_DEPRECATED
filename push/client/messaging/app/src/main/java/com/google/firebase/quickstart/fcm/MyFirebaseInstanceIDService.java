@@ -18,13 +18,32 @@ package com.google.firebase.quickstart.fcm;
 
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyFirebaseIIDService";
+	private static final String SERVER_ADDRESS = "http://10.0.2.2:8080/";
+	private static final String USERNAME = "username"; // this would be derived from the user data in a real application!
+
+	private RequestQueue _queue;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		_queue = Volley.newRequestQueue(this);
+	}
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -54,6 +73,26 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
-    }
+		JSONObject requestObject = new JSONObject();
+		try {
+			requestObject.put("token", token);
+		}
+		catch (JSONException e) {}
+
+		JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, SERVER_ADDRESS + USERNAME + "/token", requestObject,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.i(TAG, "Token saved successfully");
+					}
+				},
+				new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						Log.e(TAG, "Failed to save token - " + error);
+					}
+				});
+
+		_queue.add(req);
+	}
 }
