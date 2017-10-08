@@ -1,17 +1,14 @@
 const EventEmitter = require('events').EventEmitter;
 const util = require('util');
 
-function EachSecond() {
-	EventEmitter.call(this);
+class EachSecond extends EventEmitter {
+	start() {
+		const self = this;
+		this._id = setInterval(function() {
+			self.emit('second');
+		}, 1000);		
+	}
 }
-util.inherits(EachSecond, EventEmitter);
-
-EachSecond.prototype.start = function() {
-	const self = this;
-	this._id = setInterval(function() {
-		self.emit('second');
-	}, 1000);
-};
 
 let e = new EachSecond();
 e.on('second', function() {

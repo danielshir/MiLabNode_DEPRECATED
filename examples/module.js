@@ -1,12 +1,13 @@
 // My Module
 
-function SomeClass() {
-	this.thing = "this is the thing";
+class SomeClass {
+	constructor() {
+		this.thing = "this is the thing";	
+	}
+
+	getThing() {
+		return this.thing;		
+	}
 }
 
-SomeClass.prototype.getThing = function() {
-	return this.thing;
-};
-
 module.exports = SomeClass;
-

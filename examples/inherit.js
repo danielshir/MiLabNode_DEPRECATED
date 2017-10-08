@@ -1,22 +1,21 @@
-const util = require('util');
+class Animal {
+	constructor(name) {
+		this.name = name;
+	}
 
-function Animal(name) {
-	this.name = name;
+	printName() {
+		console.log("The name is " + this.name);
+	}
 }
 
-Animal.prototype.printName = function() {
-	console.log("The name is " + this.name);
-};
+class Dog extends Animal {
+	constructor() {
+		super("Dog");
+	}
 
-
-function Dog() {
-	Animal.call(this, "A dog");
-}
-
-util.inherits(Dog, Animal);
-
-Dog.prototype.bark = function() {
-	console.log("Woof");
+	bark() {
+		console.log("Woof!");
+	}
 }
 
 let dog = new Dog();
